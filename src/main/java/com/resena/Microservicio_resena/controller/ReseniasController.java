@@ -20,11 +20,13 @@ import com.resena.Microservicio_resena.DTO.ReseniasDTO;
 import com.resena.Microservicio_resena.model.Resenias;
 import com.resena.Microservicio_resena.service.ReseniasService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/resenias")
 public class ReseniasController {
     
-     @Autowired
+    @Autowired
     private ReseniasService reseniaService;
 
     @PostMapping
