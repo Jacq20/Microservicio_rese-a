@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.resena.Microservicio_resena.DTO.ReseniasDTO;
 import com.resena.Microservicio_resena.model.Resenias;
+import com.resena.Microservicio_resena.model.UsuarioDTO;
 import com.resena.Microservicio_resena.repository.ReseniasRepository;
 
 @Service
@@ -17,8 +19,19 @@ public class ReseniasService {
     @Autowired
     private ReseniasRepository reseniaRepository;
 
-     public Resenias crearResenia(ReseniasDTO dto) {
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public Resenias crearResenia(ReseniasDTO dto) {
         try {
+            // Verificamos que el usuario existe en ms_usuarios
+            String url = "http://localhost:8089/api/usuarios/" + dto.getIdUsuario();
+            UsuarioDTO usuario = restTemplate.getForObject(url, UsuarioDTO.class);
+
+            if (usuario == null) {
+                throw new RuntimeException("El usuario no existe");
+            }
+
             Resenias resenia = new Resenias();
             resenia.setIdProducto(dto.getIdProducto());
             resenia.setIdUsuario(dto.getIdUsuario());
